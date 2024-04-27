@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+#data folders
+voice_messages/
+
 # Distribution / packaging
 .Python
 build/
