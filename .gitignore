@@ -5,9 +5,11 @@ __pycache__/
 
 # C extensions
 *.so
+*.json
 
 #data folders
 voice_messages/
+keys/
 
 # Distribution / packaging
 .Python
