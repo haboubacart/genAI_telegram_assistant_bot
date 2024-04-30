@@ -4,20 +4,17 @@ def transcribe_voice(file_path):
     client = speech.SpeechClient()
     with open(file_path, 'rb') as audio_file:
         content = audio_file.read()
-    audio = speech.RecognitionAudio(content=content)
-    config = speech.RecognitionConfig(
-        encoding=speech.RecognitionConfig.AudioEncoding.OGG_OPUS,
-        sample_rate_hertz=48000,
-        enable_automatic_punctuation=True,
-        audio_channel_count=1,
-        language_code="fr-FR",  # Changez ceci en fonction de la langue du fichier vocal
-        model='phone_call'
-    )
-    # Envoie la requête pour la transcription
+        audio = speech.RecognitionAudio(content=content)
+        config = speech.RecognitionConfig(
+            encoding=speech.RecognitionConfig.AudioEncoding.OGG_OPUS,
+            sample_rate_hertz=48000,
+            enable_automatic_punctuation=True,
+            audio_channel_count=1,
+            language_code="fr-FR",
+            model='phone_call'
+        )
     response = client.recognize(config=config, audio=audio)
-    # Récupère les résultats de la transcription
     results = ""
     for result in response.results:
         results += result.alternatives[0].transcript
-        
     return results
