@@ -1,6 +1,7 @@
 from telegram import Update
 from telegram.ext import (
     MessageHandler,
+    Updater,
     ApplicationBuilder,
     CallbackContext,
     filters,
@@ -52,7 +53,7 @@ def execute_action(action_json):
         event_object = {
         "title" : action_json["titre"],
         "description" : action_json["description"],
-        "datetime_debut": "2024-05-03T15:00:00+02:00",
+        "datetime_debut": "2024-05-04T15:00:00+02:00",
         "duree" : action_json["duree"],
         }
         scheduling_status = create_calandar_event(service, event_object)
@@ -61,18 +62,21 @@ def execute_action(action_json):
     
     return action_json["reponse"]
 
- 
+async def error_handler(update: Update, context: CallbackContext):
+    print(f"An error occurred: {context.error}")
+
 def main():
-    app = ApplicationBuilder().token(BOT_TOKEN).read_timeout(7).get_updates_read_timeout(42).build()
+    app = ApplicationBuilder().token(BOT_TOKEN).concurrent_updates(True).build()
     app.add_handler(MessageHandler(filters.VOICE, reply_voice_message))
     app.add_handler(MessageHandler(filters.TEXT, reply_text_message))
+    print("starting telegram bot...", flush=True)
+    app.add_error_handler(error_handler)
     app.run_polling(allowed_updates=Update.ALL_TYPES)
-
+    
 
 if __name__ == "__main__":
 
     if not os.path.exists("voice_messages"):
         os.makedirs("voice_messages")
-    print("starting telegram bot...")
     main()
     #print(transcribe_voice("voice_messages/test2.wav"))
