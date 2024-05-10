@@ -96,6 +96,48 @@ prompt_QUIZ = '''
               }   
               ''' + f'\n\n Texte = {retrieved_texte}'
 
+prompt_CORRECTOR = '''
+                  Tu es un expert en quiz et tu dois avoir corriger et attribuer une note entre 0 et 5 à un utilisateur qui repond 
+                  à un quiz composé de 3 questions.\n
+                  Tu reçois un json comportant les questions, les reponses attendues et les reponse de l'utilisateur.\n
+                  Voici le json que tu peux recevoir : \n
+                  [
+                    {
+                      "q" : "question1",
+                      "a" : "response1",
+                      "r_user" : "reponse1_user"
+                    },
+                    {
+                      "q" : "question2",
+                      "r" : "response2",
+                      "r_user" : "reponse2_user"
+                    },
+                    {
+                      "q" : "question3",
+                      "r" : "response3",
+                      "r_user" : "reponse3_user"
+                    }
+                  ]
+                  \n
+                  q : correspond à la question posée. \n
+                  r : correspond à la reponse attendue. \n
+                  r_user : correspond à la reponse proposée par l'utilisateur.\n
+                  \n
+                  Tu dois retourner un json comme ça : \n
+                  [
+                    {
+                      "note" : "note de la question 1"
+                    },
+                    {
+                      "note" : "note de la question 2"
+                    },
+                    {
+                      "note" : "note de la question 3"
+                    }
+                  ]
+                  \n
+                  note : est la note que tu attribues à l'utilisateur. Tu évalues la reponse de l'utilisateur par rapport à la reponse attendue. Elle doit sous la forme d'un nombre.
+                  '''
              
 def response_to_query(query : str, prompt = prompt_QA) -> json:
     response = client.chat.completions.create(
@@ -107,5 +149,28 @@ def response_to_query(query : str, prompt = prompt_QA) -> json:
         )
     return json.loads(response.choices[0].message.content)
 
+
+query = '''
+    [
+    {
+      "q": "Quelle est la diff\u00e9rence entre \u00eatre pauvre et \u00eatre sans le sou selon R. Kiyosaki?",
+      "a": "Etre pauvre est une condition permanente, \u00eatre sans le sou est temporaire.",
+      "r_user" : "Quand tu es pauvre c'est pour toujours alors ne pas avoir d'argent est passager"
+    },
+    {
+      "q": "Quels sont les trois piliers de l'intelligence financi\u00e8re selon l'auteur?",
+      "r": "La comptabilit\u00e9, l'investissement, et la compr\u00e9hension des march\u00e9s.",
+      "r_user" : "la comptabilité et l'investissement"
+    },
+    {
+      "q": "Quelle est la signification de 'Payez-vous en priorit\u00e9' selon le livre?",
+      "r": "Cela renvoie \u00e0 l'autodiscipline et l'importance d'investir d'abord dans soi-m\u00eame, economiser ou investir avant de d\u00e9penser.",
+      "r_user" : "je ne sais pas"
+    }
+  ]
+'''
+
 if __name__ == '__main__':
-    print(json.dumps(response_to_query("construis un quiz", prompt_QUIZ), indent=2))
+    print(json.dumps(response_to_query(query, prompt_CORRECTOR), indent=2))
+
+
