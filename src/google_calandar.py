@@ -2,7 +2,6 @@ import datetime
 import os.path
 import datetime
 import pytz
-import json
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -88,6 +87,7 @@ def create_calandar_event(service, event_object):
   )
   return event_resut
 
+"""
 if __name__ == "__main__":
   creds = get_creds()
   service = build("calendar", "v3", credentials=creds)
@@ -98,6 +98,5 @@ if __name__ == "__main__":
     "datetime_debut": "2024-05-02T12:00:00+02:00",
     "duree" : 1,
   }
-  #print(json.dumps(get_calandar_events(service, creds), indent=2))
-  #print ("Event created:create ", create_calandar_event(service, event_object).get('htmlLink'))
   
+"""
