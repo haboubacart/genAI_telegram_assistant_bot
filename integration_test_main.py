@@ -1,30 +1,39 @@
 from dotenv import load_dotenv
 import time
 import os
-from notion_client import Client
-from src.speech_to_text import transcribe_voice
-from src.bot import save_voice_message
-from src.chatgpt import response_to_query
-from src.google_calandar import (get_calandar_events,
+from pprint import pprint
+from src.google.speech_to_text import transcribe_voice
+from src.telegram_bot.bot import save_voice_message
+from src.chatgpt.chatgpt import response_to_query
+from src.google.google_calandar import (get_calandar_events,
                                  create_calandar_event,
                                  get_creds)
 
-from src.notion_integration import (get_id_livre_database,
-                                    add_grade_to_quizz_row,
+from src.notion.text_block import (get_id_livre_database,
                                     create_new_block,
-                                    create_new_quizz_row, 
-                                    write_text_to_block,
-                                    get_last_quizz_row_id)
+                                    write_text_to_block)
+                                    
 
-from src.prompts import (get_corrector_prompt,
-                     get_qa_prompt,
-                     get_quizz_prompt)
+from src.notion.quizz import (add_grade_to_quizz_row, 
+                                 create_new_quizz_row,
+                                 get_last_quizz_row_id)
 
-NOTION_TOKEN = os.getenv("NOTION_KEY")
-NOTION_LIST_LECTURE_PAGE_ID = os.getenv("NOTION_LIST_LECTURE_PAGE_ID") 
-NOTION_DATABASE_LIVRE_ID = os.getenv("NOTION_DATABASE_LIVRE_ID")
-NOTION_DATABASE_QUIZZ_ID = os.getenv("NOTION_DATABASE_QUIZZ_ID")
-client = Client(auth=NOTION_TOKEN)
+
+from src.notion.tache import (get_all_taches,
+                              create_new_tache)
+
+from src.chatgpt.prompts import (get_corrector_prompt,
+                                 get_qa_prompt,
+                                 get_quizz_prompt)
+
+from config import (NOTION_TOKEN,
+                    BOT_TOKEN,
+                    SPEECH_KEY,
+                    NOTION_LIST_LECTURE_PAGE_ID,
+                    NOTION_DATABASE_LIVRE_ID,
+                    NOTION_DATABASE_QUIZZ_ID,
+                    NOTION_DATABASE_TACHE_ID,
+                    CLIENT)
 
 retrieved_texte = '''
 **Quelques passages importants** 
@@ -68,11 +77,15 @@ responses_to_quizz = '''
 '''
 
 if __name__ == '__main__':
-    quizz = response_to_query(get_quizz_prompt(retrieved_texte))
+    '''quizz = response_to_query(get_quizz_prompt(retrieved_texte))
     print(quizz)
     create_new_quizz_row(client, NOTION_DATABASE_QUIZZ_ID, str(quizz[0]), str(quizz[1]))
     time.sleep(10)
     last_quizz_row_id = get_last_quizz_row_id(client, NOTION_DATABASE_QUIZZ_ID)
     grades = response_to_query(get_corrector_prompt(responses_to_quizz))
     print(grades)
-    add_grade_to_quizz_row(client, NOTION_DATABASE_QUIZZ_ID, last_quizz_row_id, grades, grades>9)
+    add_grade_to_quizz_row(client, NOTION_DATABASE_QUIZZ_ID, last_quizz_row_id, grades, grades>9)'''
+    pprint(get_all_taches(CLIENT, NOTION_DATABASE_TACHE_ID))
+    #create_new_tache(client, NOTION_DATABASE_TACHE_ID, "tache de test")
+
+    

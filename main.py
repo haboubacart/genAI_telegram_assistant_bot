@@ -7,21 +7,26 @@ from telegram.ext import (
     filters,
 )
 from dotenv import load_dotenv
-from src.speech_to_text import transcribe_voice
-from src.bot import save_voice_message
-from src.chatgpt import response_to_query
-from src.google_calandar import get_calandar_events
-from src.google_calandar import create_calandar_event
-from src.google_calandar import get_creds
+from src.google.speech_to_text import transcribe_voice
+from src.telegram_bot.bot import save_voice_message
+from src.chatgpt.chatgpt import response_to_query
+from src.google.google_calandar import get_calandar_events
+from src.google.google_calandar import create_calandar_event
+from src.google.google_calandar import get_creds
 from googleapiclient.discovery import build
 
+from config import (NOTION_TOKEN,
+                    BOT_TOKEN,
+                    SPEECH_KEY,
+                    NOTION_LIST_LECTURE_PAGE_ID,
+                    NOTION_DATABASE_LIVRE_ID,
+                    NOTION_DATABASE_QUIZZ_ID,
+                    NOTION_DATABASE_TACHE_ID,
+                    CLIENT)
 
-import os
-load_dotenv()
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-speech_key = os.getenv("SPEECH_KEY")
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = speech_key
+
+
 
 import json
 async def reply_voice_message(update: Update, context: CallbackContext):
