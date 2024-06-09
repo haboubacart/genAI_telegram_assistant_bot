@@ -17,12 +17,15 @@ def response_to_query(prompt, query='') -> json:
         )
     response = json.loads(response.choices[0].message.content)
     
-    if response["action"] == "quiz" :
-      list_questions, list_reponses = [],[]
+    if response["action"] == "quizz" :
+      result = {}
+      list_questions, list_responses = [],[]
       for q_a in response["quiz_qa"] :
          list_questions.append(q_a["q"])
-         list_reponses.append(q_a["a"])
-      return (list_questions, list_reponses)
+         list_responses.append(q_a["a"])
+      result['list_questions'] = list_questions
+      result['list_responses'] = list_responses
+      return (result)
     
     if response["action"] == "evaluate_user_reponses" :
       grade = 0

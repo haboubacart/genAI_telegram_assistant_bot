@@ -1,3 +1,15 @@
+import ast
+
+def get_last_quizz(client, database_id) : 
+    result = {}
+    last_quizz = client.databases.query(database_id=database_id)['results'][0]['properties']
+    list_questions = last_quizz['Questions']['title'][0]['plain_text']
+    list_responses = last_quizz['Reponses']['rich_text'][0]['plain_text']
+
+    result['list_questions'] = ast.literal_eval(list_questions)
+    result['list_responses'] = ast.literal_eval(list_responses)
+
+    return result
 
 def get_last_quizz_row_id(client, database_id) :
     bd_data_response =  client.databases.query(database_id=database_id)

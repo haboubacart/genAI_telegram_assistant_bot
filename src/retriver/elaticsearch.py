@@ -1,8 +1,8 @@
 from elasticsearch import Elasticsearch
 from dotenv import load_dotenv
 import os
-
 load_dotenv()
+
 ELASTIC_HOST = os.getenv("ELASTIC_HOST")
 es = Elasticsearch([ELASTIC_HOST])
 
@@ -50,3 +50,6 @@ if __name__=='__main__':
     results = es.search(index=index_name, body={"query": {"match_all": {}}})
     for hit in results['hits']['hits']:
         print(hit['_source'])
+
+
+
